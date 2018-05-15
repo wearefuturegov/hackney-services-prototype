@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'dotenv'
+gem 'httparty'
+gem 'rspec'
+gem 'pry'
+gem 'airrecord'
+gem 'activesupport'
