@@ -3,4 +3,4 @@ Bundler.require
 
 require './lib/services-api'
 
-run ServicesAPI
+run ServicesAPI::App

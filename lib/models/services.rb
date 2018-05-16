@@ -34,7 +34,7 @@ class Services < Airrecord::Table
       {
         id: self[:id],
         name: self[:name],
-        url: "#{ENV['API_BASE']}/services/#{self[:id]}"
+        url: url
       }
     end
   end

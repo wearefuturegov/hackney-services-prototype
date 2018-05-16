@@ -5,7 +5,8 @@ class DeliverableTypes < Airrecord::Table
   def to_json
     {
       name: self[:label],
-      description: self[:description]
+      description: self[:description],
+      url: url
     }
   end
 end
