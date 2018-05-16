@@ -11,4 +11,31 @@ class Services < Airrecord::Table
   
   belongs_to :type, class: 'ServiceTypes', column: 'Type'
   belongs_to :provider, class: 'Providers', column: 'Provider'
+  
+  def get_association(association)
+    self[association]&.map { |a| a.to_json } || []
+  end
+  
+  def to_json(format = :long)
+    if format == :long
+      {
+        id: self[:id],
+        name: self[:name],
+        type: self[:type][:label],
+        contacts: get_association(:contacts),
+        provider: self[:provider].to_json,
+        eligibility: get_association(:eligibility),
+        deliverable_types: get_association(:deliverable_types),
+        functions: get_association(:functions),
+        cost_options:get_association(:cost_options),
+        attending_information: get_association(:attending_information)
+      }
+    else
+      {
+        id: self[:id],
+        name: self[:name],
+        url: "#{ENV['API_BASE']}/services/#{self[:id]}"
+      }
+    end
+  end
 end

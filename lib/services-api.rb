@@ -29,75 +29,13 @@ class ServicesAPI < Sinatra::Base
   
   get '/services' do
     services = {
-      services: Services.all.map do |s|
-        {
-          id: s[:id],
-          name: s.fields['Name'],
-          url: "#{ENV['API_BASE']}/services/#{s[:id]}"
-        }
-      end
+      services: Services.all.map { |s| s.to_json(:short) }
     }
     json services
   end
   
   get '/services/:id' do
     service = Services.all(filter: "{id} = '#{params[:id]}'").first
-    response = {
-      id: service[:id],
-      name: service[:name],
-      type: service[:type][:label],
-      contacts: service[:contacts].map do |c|
-        {
-          webpage: c[:webpage],
-          email: c[:email],
-          phone_number: c[:phone_number],
-          contact_person: c[:contact_person],
-          contact_person_position: c[:contact_person_position]
-        }
-      end,
-      provider: {
-        name: service[:provider][:name],
-        home_page: service[:provider][:home_page]
-      },
-      eligibility: service[:eligibility]&.map do |e|
-        {
-          id: e[:identifier],
-          name: e[:label],
-          description: e[:description]
-        }
-      end || [],
-      deliverable_types: service[:deliverable_types].map do |t|
-        {
-          name: t[:label],
-          description: t[:description]
-        }
-      end,
-      functions: service[:functions].map do |t|
-        {
-          name: t[:label],
-          description: t[:description]
-        }
-      end,
-      cost_options: service[:cost_options]&.map do |i|
-        {
-          name: i[:cost_option],
-          amount: i[:amount]
-        }
-      end || [],
-      attending_information: service[:attending_information]&.map do |i|
-        {
-          days: i[:days],
-          opens: i[:opens],
-          closes: i[:closes],
-          description: i[:description],
-          venue: {
-            name: i[:venue][:name],
-            address: i[:venue][:address],
-            accessibility_information: i[:venue][:accessibility_information]
-          }
-        }
-      end || []
-    }
-    json response
+    json service.to_json
   end
 end
