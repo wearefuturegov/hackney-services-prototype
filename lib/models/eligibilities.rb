@@ -8,7 +8,8 @@ class Eligibilities < Airrecord::Table
     {
       id: self[:identifier],
       name: self[:label],
-      description: self[:description]
+      description: self[:description],
+      url: url
     }
   end
 end
