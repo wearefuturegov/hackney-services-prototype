@@ -26,10 +26,6 @@ RSpec.describe Services do
       expect(service[:functions].count).to eq(1)
     end
     
-    it 'has eligibilities' do
-      expect(service[:eligibility].count).to eq(1)
-    end
-    
     it 'has cost options' do
       expect(service[:cost_options].count).to eq(1)
     end

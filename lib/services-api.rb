@@ -17,7 +17,7 @@ require 'models/services'
 require 'models/deliverable_types'
 require 'models/service_types'
 require 'models/providers'
-require 'models/eligibility'
+require 'models/eligibilities'
 require 'models/functions'
 require 'models/cost_options'
 require 'models/attending_information'
@@ -31,30 +31,35 @@ module ServicesAPI
     end
     
     get '/services' do
-      json Services.all.map { |s| s.to_json(:short) }
+      json Services.all_as_json
     end
     
     get '/services/:id' do
-      service = Services.all(filter: "{id} = '#{params[:id]}'").first
-      json service.to_json
+      json Services.find_by_id(params[:id]).to_json
     end
     
     get '/deliverable_types' do
-      deliverable_types = {
-        deliverable_types: DeliverableTypes.all.map { |s| s.to_json }
-      }
-      json deliverable_types
+      json DeliverableTypes.all_as_json
     end
     
     get '/deliverable_types/:id' do
-      deliverable_type = DeliverableTypes.all(filter: "{id} = '#{params[:id]}'").first
-      json deliverable_type.to_json
+      json DeliverableTypes.find_by_id(params[:id]).to_json
     end
     
     get '/deliverable_types/:id/services' do
-      deliverable_type = DeliverableTypes.all(filter: "{id} = '#{params[:id]}'").first
-      services = Services.all(filter: "SEARCH('#{deliverable_type[:id]}', ARRAYJOIN({Deliverable Types}))").map { |s| s.to_json(:short) }
-      json services
+      json DeliverableTypes.find_by_id(params[:id])[:services].map { |s| s.to_json }
+    end
+    
+    get '/eligibilities' do
+      json Eligibilities.all_as_json
+    end
+    
+    get '/eligibilities/:id' do
+      json Eligibilities.find_by_id(params[:id]).to_json
+    end
+    
+    get '/eligibilities/:id/services' do
+      json Eligibilities.find_by_id(params[:id])[:services].map { |s| s.to_json }
     end
     
   end
