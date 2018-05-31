@@ -6,7 +6,8 @@ class Eligibilities < Airrecord::Table
   
   def to_json
     {
-      id: self[:identifier],
+      id: self[:id],
+      identifier: self[:identifier],
       name: self[:label],
       description: self[:description],
       url: url

@@ -31,7 +31,18 @@ module ServicesAPI
     end
     
     get '/services' do
-      json Services.all_as_json
+      begin
+        services = Services.all_as_json
+        services = filter_services(services) unless params.keys.length.zero?
+        json services
+      rescue
+        response = {
+          response_code: 400,
+          errors: 'There was something wrong with your request. Please try again.'
+        }
+        status 400
+        json response
+      end
     end
     
     get '/services/:id' do
@@ -60,6 +71,16 @@ module ServicesAPI
     
     get '/eligibilities/:id/services' do
       json Eligibilities.find_by_id(params[:id])[:services].map { |s| s.to_json }
+    end
+    
+    def filter_services(services)
+      services.select do |s|
+        match = false
+        params.each do |k,v|
+          match = (s[k.to_sym].map { |i| i[:id].to_s } & v.split(',')).length > 0
+        end
+        match
+      end
     end
     
   end

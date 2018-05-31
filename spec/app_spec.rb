@@ -11,6 +11,35 @@ RSpec.describe ServicesAPI::App do
       expect(body.count).to eq(3)
     end
     
+    describe 'filtering' do
+      
+      it 'filters by deliverable type' do
+        get '/services?deliverable_types=343'
+        expect(body.count).to eq(1)
+      end
+      
+      it 'filters by eligibility' do
+        get '/services?eligibilities=1957'
+        expect(body.count).to eq(1)
+      end
+      
+      it 'filters by eligibility and deliverable type' do
+        get '/services?eligibilities=1957&deliverable_types=343'
+        expect(body.count).to eq(1)
+      end
+      
+      it 'filters by multiple things' do
+        get '/services?eligibilities=956,958'
+        expect(body.count).to eq(1)
+      end
+      
+      it 'does not crap out on unsupported params' do
+        get '/services?eligibilities=1957&deliverable_types=343&foo=bar'
+        expect(last_response.status).to eq(400)
+      end
+      
+    end
+    
   end
   
   describe 'GET /services/:id' do
